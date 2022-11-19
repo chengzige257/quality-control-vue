@@ -6,10 +6,15 @@ import employeeConfig from "@/views/config/EmployeeConfig";
 
 const routes = [
   {
+    path: '',
+    name: 'login',
+    component: LoginView
+  },
+  {
     component: HomeView,
     children: [
       {
-        path: '/product',
+        path: '/home',
         name: 'product',
         component: BelowStandard
       }
@@ -24,11 +29,6 @@ const routes = [
         component: employeeConfig
       }
     ]
-  },
-  {
-    path: '/login',
-    name: 'login',
-    component: LoginView
   }
 ]
 

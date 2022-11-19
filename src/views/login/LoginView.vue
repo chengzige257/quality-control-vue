@@ -66,8 +66,8 @@ export default {
             name: "管理员",
             mail: "2572175264@qq.com"
           })
-          let path = this.$route.query.redirect
-          this.$router.push({ path: path===undefined?'/product':path });
+          let redirect = this.$route.query.redirect
+          this.$router.push({ path: (redirect===undefined)?'/home':redirect });
         } else {
           return false;
         }

@@ -9,12 +9,10 @@ import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 
 router.beforeEach((to, from, next) => {//配置路由守卫
 
-    if(to.path==='/login'||store.state.user.id){
-        console.log(1)
+    if(to.path==='/'||store.state.user.id){
         next()
     }else{
-        console.log(2)
-        next({ path: "/login?redirect=" + to.path});
+        next({ path: '/',query: {redirect: to.path}});
     }
 });
 

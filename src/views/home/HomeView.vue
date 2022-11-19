@@ -5,7 +5,6 @@
         <div style="height: 60px;display: flex;align-items: center">
           <span style="width: 100%;text-align: center">不合格品管控程序</span>
         </div>
-
         <el-menu
             router
             active-text-color="#ffd04b"
@@ -16,7 +15,7 @@
             @open=""
             @close=""
         >
-          <el-menu-item index="/product">
+          <el-menu-item index="/home">
             <template #title>
               不合格品列表
             </template>
