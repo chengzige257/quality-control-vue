@@ -1,10 +1,10 @@
 <template>
-员工设置
+统计
 </template>
 
 <script>
 export default {
-  name: "EmployeeConfig"
+  name: "DailyStatistics"
 }
 </script>
 

@@ -1,10 +1,10 @@
 <template>
-员工设置
+部门设置
 </template>
 
 <script>
 export default {
-  name: "EmployeeConfig"
+  name: "DepartmentConfig"
 }
 </script>
 

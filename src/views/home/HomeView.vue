@@ -1,48 +1,52 @@
 <template>
   <div>
-    <el-container  style="height: 100vh">
-      <el-aside class="cannotselect" width="200px" style="background-color: #000;color: white">
-        <div style="height: 60px;display: flex;align-items: center">
-          <span style="width: 100%;text-align: center">不合格品管控程序</span>
-        </div>
+    <el-container>
+      <el-aside  width="auto" class="cannotselect">
         <el-menu
+            class="side-nav-bar"
             router
-            active-text-color="#ffd04b"
-            background-color="#000"
-            class="el-menu-vertical-demo"
             :default-active="this.$route.path"
-            text-color="#fff"
-            @open=""
-            @close=""
+            :collapse="this.$store.state.collapse"
+            background-color="#304156"
+            text-color="#BFCBD9"
+            active-text-color="#409EFF"
         >
-          <el-menu-item index="/home">
-            <template #title>
-              不合格品列表
+          <template v-for="route of this.$store.state.menu">
+            <template v-if="route.children === null || route.children.length === 0"><!--一级菜单-->
+              <template v-if="!route.isHidden">
+                <el-menu-item :index = "route.path">
+                  <span>{{route.name}}</span>
+                </el-menu-item>
+              </template>
             </template>
-          </el-menu-item>
-          <el-sub-menu index="/submeun">
-            <template #title>
-              选项设置
+            <template v-else><!--二级菜单-->
+              <template v-if="!route.isHidden">
+                <el-sub-menu :index = "route.path">
+                  <template #title>
+                    <span>{{route.name}}</span>
+                  </template>
+                  <template v-for="children of route.children">
+                    <template v-if="!children.isHidden">
+                      <el-menu-item :index = "children.path">
+                        <span>{{children.name}}</span>
+                      </el-menu-item>
+                    </template>
+                  </template>
+                </el-sub-menu>
+              </template>
             </template>
-            <el-menu-item index="/2-1">部门设置</el-menu-item>
-            <el-menu-item index="/2-2">系统设置</el-menu-item>
-            <el-menu-item index="/2-3">超时设置</el-menu-item>
-            <el-menu-item index="/employee">员工设置</el-menu-item>
-          </el-sub-menu>
-          <el-menu-item index="/3">
-            <span>统计</span>
-          </el-menu-item>
-          <el-menu-item index="/4">
-            <span>日志管理</span>
-          </el-menu-item>
+          </template>
+
         </el-menu>
       </el-aside>
-      <el-container>
-        <el-header height="60px" style="background-color: dodgerblue">
-
+      <el-container class="main-container">
+        <el-header  height="84px" style="padding:0">
+          <NavBar :key="$route.fullPath"/>
         </el-header>
-        <el-main>
-          <router-view></router-view>
+        <el-main  style="background:#F7F9FB">
+          <div class="fade-transform-box">
+              <router-view :key="$route.fullPath"/>
+          </div>
         </el-main>
       </el-container>
     </el-container>
@@ -50,20 +54,55 @@
 </template>
 
 <script>
-
-
+import NavBar from "@/components/NavBar";
 export default {
   name: 'HomeView',
   components: {
+    NavBar
+  },
+  data(){
+    return {
+      fullscreen: false,
+    };
+  },
+  methods: {
+
   }
 }
 </script>
 <style>
+.main-container {
+  margin-left: 210px;
+  min-height: 100vh;
+}
+
+
+.side-nav-bar:not(.el-menu--collapse) {
+  width: 210px;
+}
+.side-nav-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+.side-nav-bar i {
+  margin-right: 1rem;
+}
+*::-webkit-scrollbar {
+  width: 0.5rem;
+  height: 1px;
+}
+*::-webkit-scrollbar-thumb {
+  border-radius: 0.5rem;
+  background-color: rgba(144, 147, 153, 0.3);
+}
 .cannotselect {
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
+  -webkit-user-select:none;
+  -moz-user-select:none;
+  -ms-user-select:none;
+  user-select:none;
 }
 </style>

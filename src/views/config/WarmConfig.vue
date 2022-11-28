@@ -1,10 +1,10 @@
 <template>
-员工设置
+超时提醒
 </template>
 
 <script>
 export default {
-  name: "EmployeeConfig"
+  name: "warmConfig"
 }
 </script>
 

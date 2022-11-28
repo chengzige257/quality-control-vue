@@ -1,10 +1,10 @@
 <template>
-员工设置
+日志管理
 </template>
 
 <script>
 export default {
-  name: "EmployeeConfig"
+  name: "LogManager"
 }
 </script>
 

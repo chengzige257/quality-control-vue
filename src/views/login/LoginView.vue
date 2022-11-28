@@ -39,7 +39,6 @@
 <script>
 
 export default {
-
   name: "LoginView",
   components:{
 
@@ -60,14 +59,13 @@ export default {
     login() {
       this.$refs.ruleForm.validate(valid => {
         if (valid) {
-          this.$store.commit("login",{
-            id: 1,
-            account: "admin",
-            name: "管理员",
-            mail: "2572175264@qq.com"
+          this.axios.postForm('/login',this.loginForm).then(response => {
+            let data = response.data;
+            this.$store.commit('login', data)
+            let redirect = this.$route.query.redirect
+            this.$router.push({path: (redirect === undefined) ? '/home' : redirect});
           })
-          let redirect = this.$route.query.redirect
-          this.$router.push({ path: (redirect===undefined)?'/home':redirect });
+
         } else {
           return false;
         }
