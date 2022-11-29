@@ -178,6 +178,8 @@ export default {
 }
 .el-icon-close {
   padding: 0.1rem;
+  position: relative;
+  top: 2px;
 }
 .el-icon-close:hover {
   border-radius: 50%;
