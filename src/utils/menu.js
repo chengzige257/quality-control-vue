@@ -1,4 +1,5 @@
 import axios from "axios";
+import {ElMessage} from "element-plus";
 export const initMenus = (router, store,next,to) => {//按F5刷新的话vuex里的会被清空，长度变为0
     if (store.state.menu !== null) {
         next()
@@ -11,7 +12,7 @@ export const initMenus = (router, store,next,to) => {//按F5刷新的话vuex里�
                     initRoute(router,store.state)
                     next({...to,replace:true})//解决router4版本的第一次路由不匹配问题
                 } else {
-                    this.$ElMessage.error('请求菜单失败')
+                    ElMessage.error('请求菜单失败')
                 }
             }
         })

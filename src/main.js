@@ -11,8 +11,8 @@ import axios from 'axios'
 import vueAxios from 'vue-axios'
 import {initMenus} from "@/utils/menu";
 
-
-router.beforeEach((to, from, next) => {//配置路由守卫
+//配置路由守卫
+router.beforeEach((to, from, next) => {
     if(to.path==='/'){
         next()
     }else if(store.state.user.id){
@@ -26,14 +26,16 @@ router.beforeEach((to, from, next) => {//配置路由守卫
 axios.interceptors.response.use(function (response) {
     switch (response.data.code) {
         case 51000:
-            this.$ElMessage.error(response.data.message)
+            ElMessage.error(response.data.message)
             break;
         case 50000:
-            this.$ElMessage.error(response.data.message)
+            ElMessage.error(response.data.message)
             break;
         case 40400:
-            this.$ElMessage.error(response.data.message)
-            this.$router.push({ path: '/',query: {redirect: this.$route.path}})
+            ElMessage.error(response.data.message)
+            let redirectPath = window.location.hash;
+            redirectPath = redirectPath.substring(1,redirectPath.length)
+            router.push({ path: '/',query: {redirect: redirectPath}})
             break;
     }
     return response;
@@ -52,3 +54,5 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {//注册Ele
 
 app.config.globalProperties.$ElMessage = ElMessage
 app.mount('#app')
+
+
