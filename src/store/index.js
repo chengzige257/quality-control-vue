@@ -51,8 +51,8 @@ export default createStore({
   },
   plugins: [
     createPersistedState({
-      storage: window.sessionStorage,
-      reducer(state){//指定需要持久化的数据
+      storage: window.localStorage,
+      reducer(state){//指定需要持久化的数据，不写则默认全部
         return{
           user: state.user,
           tabList: state.tabList
