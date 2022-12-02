@@ -4,9 +4,23 @@
   <div class="nav-bar">
     <!-- 右侧菜单 -->
     <div class="right-menu">
+      <el-dropdown class="el-dropdown-link" @command="handleCommand">
+        <span style="display: flex;align-items: center">
+          {{$store.state.user.name}}
+          <el-icon class="el-icon--right">
+            <arrow-down />
+          </el-icon>
+        </span>
+        <template #dropdown>
+          <el-dropdown-menu>
+            <el-dropdown-item command="action1">Action 1</el-dropdown-item>
+            <el-dropdown-item command="logout" divided>退出登录</el-dropdown-item>
+          </el-dropdown-menu>
+        </template>
+      </el-dropdown>
       <!-- 全屏按钮 -->
       <div class="screen-full" @click="fullScreen">
-        <el-icon><FullScreen /></el-icon>
+        <el-icon class="fullScreen"><FullScreen /></el-icon>
       </div>
 
     </div>
@@ -36,12 +50,27 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "NavBar",
   created() {
     this.$store.commit("saveTab", this.$route);
   },
   methods: {
+    handleCommand(command){
+      if(command === "logout"){
+        axios.get('/logout').then(response=>{
+          if(response.data.flag){
+            this.$ElMessage.success('退出成功')
+            this.$store.commit('logout');
+            this.$store.commit('resetTab');
+            this.$store.commit('emptyMenu');
+            this.$router.push('/')
+          }
+        })
+      }
+    },
     goTo(tab) {
       //跳转标签
       this.$router.push({ path: tab.path });
@@ -96,6 +125,13 @@ export default {
 </script>
 
 <style scoped>
+.el-dropdown-link {
+  margin-right: 10px;
+}
+
+.el-dropdown-link:hover {
+  color: dodgerblue;
+}
 .nav-bar {
   display: flex;
   align-items: center;
@@ -104,11 +140,7 @@ export default {
   height: 50px;
   box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
 }
-.hambuger-container {
-  font-size: 1.25rem;
-  cursor: pointer;
-  margin-right: 24px;
-}
+
 .tabs-wrapper {
   overflow-x: auto;
   overflow-y: hidden;
@@ -190,6 +222,10 @@ export default {
   margin-left: auto;
   display: flex;
   align-items: center;
+}
+.fullScreen {
+  position: relative;
+  top: 3px;
 }
 .el-icon-caret-bottom {
   margin-left: 0.5rem;
