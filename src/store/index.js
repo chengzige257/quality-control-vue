@@ -3,7 +3,6 @@ import createPersistedState from "vuex-persistedstate";
 
 export default createStore({
   state: {
-    collapse: false,
     user: {
       id: null,
       account: null,
@@ -42,8 +41,10 @@ export default createStore({
       state.user.name = null;
       state.user.mail = null;
       state.user.authorities = null;
+    },
+    emptyMenu(state){
+      state.menu = null
     }
-
   },
   actions: {
   },

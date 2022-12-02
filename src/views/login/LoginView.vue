@@ -62,6 +62,7 @@ export default {
           this.axios.postForm('/login',this.loginForm).then(response => {
             let data = response.data;
             this.$store.commit('login', data)
+            this.$ElMessage.success('登录成功')
             let redirect = this.$route.query.redirect
             this.$router.push({path: (redirect === undefined) ? '/home' : redirect});
           })
