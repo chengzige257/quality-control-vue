@@ -16,7 +16,7 @@ router.beforeEach((to, from, next) => {
     if(to.path==='/'){
         next()
     }else if(store.state.user.id){
-        initMenus(router,store,next,to)
+        initMenus(router,store,next)
     }else{
         next({ path: '/',query: {redirect: to.path}});
     }

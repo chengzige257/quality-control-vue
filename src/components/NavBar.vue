@@ -37,7 +37,7 @@
                 {{ item.name }}
                 <i
                     class="el-icon-close"
-                    v-if="item.path !== '/home'"
+                    v-if="item.path !== '/index'"
                     @click.stop="removeTab(item)"
                 ><el-icon><Close /></el-icon></i>
               </span>
@@ -60,12 +60,13 @@ export default {
   methods: {
     handleCommand(command){
       if(command === "logout"){
-        axios.get('/logout').then(response=>{
+        axios.get('/api/logout').then(response=>{
           if(response.data.flag){
             this.$ElMessage.success('退出成功')
             this.$store.commit('logout');
             this.$store.commit('resetTab');
             this.$store.commit('emptyMenu');
+            this.$store.commit('resetRouter');
             this.$router.push('/')
           }
         })
@@ -86,10 +87,10 @@ export default {
     },
     closeAllTab() {
       this.$store.commit("resetTab");
-      this.$router.push({ path: "/home" });
+      this.$router.push({ path: "/index" });
     },
     //标签是否处于当前页
-    isActive: function(tab) {
+    isActive(tab) {
       if (tab.path === this.$route.path) {
         return "tabs-view-item-active";
       }

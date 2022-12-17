@@ -3,19 +3,54 @@ import createPersistedState from "vuex-persistedstate";
 
 export default createStore({
   state: {
-    user: {
+    routerRollBack: [],//删除路由的回调函数
+    user: {//用户筛选条件缓存
       id: null,
       account: null,
       name: null,
       mail: null,
       authorities: null
     },
-    tabList: [{ name: "不合格品列表", path: "/home" }],
-    menu: null
+    tabList: [{path: '/index', name: '首页'}],//标签缓存
+    menu: null,
+    employeePage: {
+      conditionUser: {
+        name: "",
+        account: "",
+        mail: "",
+        disable: null
+      },
+      count: 0,
+      current: 1,
+      size: 10
+    },
   },
   getters: {
   },
   mutations: {
+    resetRouter(state) {
+      state.routerRollBack.forEach(rollBack =>{
+        rollBack()
+      })
+    },
+    saveEmployeePage(state, employeePage){
+      state.employeePage.conditionUser.name = employeePage.conditionUser.name
+      state.employeePage.conditionUser.account = employeePage.conditionUser.account
+      state.employeePage.conditionUser.mail = employeePage.conditionUser.mail
+      state.employeePage.conditionUser.disable = employeePage.conditionUser.disable
+      state.employeePage.count = employeePage.count
+      state.employeePage.current = employeePage.current
+      state.employeePage.size = employeePage.size
+    },
+    removeEmployeePage(state){
+      state.employeePage.conditionUser.name = ""
+      state.employeePage.conditionUser.account = ""
+      state.employeePage.conditionUser.mail = ""
+      state.employeePage.conditionUser.disable = null
+      state.employeePage.count = 0
+      state.employeePage.current = 1
+      state.employeePage.size = 10
+    },
     saveTab(state, tab) {
       if (state.tabList.findIndex(item => item.path === tab.path) === -1) {
         state.tabList.push({ name: tab.name, path: tab.path });
@@ -26,7 +61,8 @@ export default createStore({
       state.tabList.splice(index, 1);
     },
     resetTab(state) {
-      state.tabList = [{ name: "不合格品列表", path: "/home" }];
+      state.tabList = [{path: '/index', name: '首页'}];
+      this.commit('removeEmployeePage')
     },
     login(state, user) {
       state.user.id = user.id;
@@ -44,6 +80,7 @@ export default createStore({
     },
     emptyMenu(state){
       state.menu = null
+
     }
   },
   actions: {

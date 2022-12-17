@@ -59,12 +59,14 @@ export default {
     login() {
       this.$refs.ruleForm.validate(valid => {
         if (valid) {
-          this.axios.postForm('/login',this.loginForm).then(response => {
-            let data = response.data;
-            this.$store.commit('login', data)
-            this.$ElMessage.success('登录成功')
-            let redirect = this.$route.query.redirect
-            this.$router.push({path: (redirect === undefined) ? '/home' : redirect});
+          this.axios.postForm('/api/login',this.loginForm).then(response => {
+            if(response.data.flag){
+              let data = response.data.data;
+              this.$store.commit('login', data)
+              this.$ElMessage.success('登录成功')
+              let redirect = this.$route.query.redirect
+              this.$router.push({path: (redirect === undefined) ? '/index' : redirect});
+            }
           })
 
         } else {

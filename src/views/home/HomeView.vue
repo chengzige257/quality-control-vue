@@ -1,16 +1,16 @@
 <template>
   <div>
-    <el-container>
+    <el-container  class="main-container">
       <el-aside  width="auto" class="cannotselect">
         <el-menu
+            background-color="#304156"
+            style="height: 100vh"
             class="side-nav-bar"
             router
-            :default-active="this.$route.path"
-            :collapse="this.$store.state.collapse"
-            background-color="#304156"
             text-color="#BFCBD9"
+            :default-active="$route.path"
             active-text-color="#409EFF"
-        >
+        ><!--:default-active="$route.path"保证当前路由与菜单的选中一致-->
           <template v-for="route of this.$store.state.menu">
             <template v-if="route.children === null || route.children.length === 0"><!--一级菜单-->
               <template v-if="!route.isHidden">
@@ -39,14 +39,12 @@
 
         </el-menu>
       </el-aside>
-      <el-container class="main-container">
+      <el-container style="height: 100vh">
         <el-header  height="84px" style="padding:0">
-          <NavBar :key="$route.fullPath"/>
+          <NavBar :key="$route.fullPath"/><!--解决标签和菜单不一致的问题-->
         </el-header>
-        <el-main  style="background:#F7F9FB">
-          <div class="fade-transform-box">
-              <router-view :key="$route.fullPath"/>
-          </div>
+        <el-main style="background:#F7F9FB;overflow-y: scroll;height: 3px">
+            <router-view :key="$route.fullPath"/><!--解决标签和菜单不一致的问题-->
         </el-main>
       </el-container>
     </el-container>
@@ -72,32 +70,19 @@ export default {
 </script>
 <style>
 .main-container {
-  margin-left: 210px;
   min-height: 100vh;
 }
-
-
 .side-nav-bar:not(.el-menu--collapse) {
   width: 210px;
 }
-.side-nav-bar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  overflow-x: hidden;
-  overflow-y: auto;
-}
-.side-nav-bar i {
-  margin-right: 1rem;
-}
+
 *::-webkit-scrollbar {
-  width: 0.5rem;
+  width: 0;/*设置滚动条的宽度*/
   height: 1px;
 }
 *::-webkit-scrollbar-thumb {
-  border-radius: 0.5rem;
-  background-color: rgba(144, 147, 153, 0.3);
+  border-radius: 0;
+  background-color: rgba(144, 147, 153, 0.3);/*设置滚动条的颜色*/
 }
 .cannotselect {
   -webkit-user-select:none;
