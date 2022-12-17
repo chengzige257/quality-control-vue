@@ -12,6 +12,7 @@ export default createStore({
       authorities: null
     },
     tabList: [{path: '/index', name: '首页'}],//标签缓存
+    currentTabPath: '/index',
     menu: null,
     employeePage: {
       conditionUser: {
@@ -93,7 +94,8 @@ export default createStore({
       reducer(state){//指定需要持久化的数据，不写则默认全部
         return{
           user: state.user,
-          tabList: state.tabList
+          tabList: state.tabList,
+          currentTabPath: state.currentTabPath
         }
       }
     })
