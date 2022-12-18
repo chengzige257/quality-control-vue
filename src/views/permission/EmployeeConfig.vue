@@ -251,7 +251,7 @@ export default {
       this.isUploading = false
     },
     download() {
-      var fileDownload = require('../../utils/fileDownload')
+      let fileDownload = require('../../utils/fileDownload')
       this.isDownloading = true
       axios.post('/api/users/download',this.employeePage.conditionUser,{responseType: 'blob'}).then(response=>{
         fileDownload(response.data,'员工信息表.xlsx')
@@ -285,9 +285,20 @@ export default {
       })
     },
     closeDialog() {
+      let newUser = {
+        id: null,
+        account: "",
+        password: "",
+        name: "",
+        disable: false,
+        mail: "",
+        roles: []
+      }
+      this.postUser = newUser
       this.$refs.ruleFormRef.resetFields()
     },
     updateOpenDialog(row){
+
       if(this.validateField.length === 4) {
         this.validateField.pop()
       }
