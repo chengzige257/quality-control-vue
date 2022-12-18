@@ -84,10 +84,4 @@ export default {
   border-radius: 0;
   background-color: rgba(144, 147, 153, 0.3);/*设置滚动条的颜色*/
 }
-.cannotselect {
-  -webkit-user-select:none;
-  -moz-user-select:none;
-  -ms-user-select:none;
-  user-select:none;
-}
 </style>
