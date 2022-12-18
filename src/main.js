@@ -17,7 +17,7 @@ router.beforeEach((to, from, next) => {
         next()
     }else if(store.state.user.id){
         store.state.currentTabPath = to.path
-        initMenus(router,store,next)
+        initMenus(router,store,next,to)
     }else{
         next({ path: '/',query: {redirect: to.path}});
     }

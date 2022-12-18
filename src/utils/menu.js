@@ -1,18 +1,17 @@
 import axios from "axios";
 
-export const initMenus = (router, store,next) => {//按F5刷新的话vuex里的会被清空，长度变为0
+export const initMenus = (router, store,next,to) => {//按F5刷新的话vuex里的会被清空，长度变为0
     if (store.state.menu !== null) {//已经登录，并且已经获取菜单
         next()
     }else {
         axios.get("/api/menu").then(response => {
-            if (response) {
+            if (response.data.flag) {
                 let responseData = response.data
-                if (responseData.flag) {
-                    store.state.menu = responseData.data
-                    initRoute(router,store.state)
-                    // next({...to,replace: true})//动态加载路由时，解决router4版本的第一次路由不匹配问题
-                    next({path: store.state.currentTabPath})//解决router4版本的第一次路由不匹配问题
-                }
+                store.state.menu = responseData.data
+                initRoute(router,store.state)
+                // to.path = store.state.currentTabPath
+                // next({...to,replace: true})//动态加载路由时，解决router4版本的第一次路由不匹配问题
+                next({...to,replace: true,path: store.state.currentTabPath})//解决router4版本的第一次路由不匹配问题
             }
         })
     }
