@@ -37,9 +37,9 @@
           </el-table-column>
         </el-table>
     </div>
-    <div style="background-color: #42b983"></div>
-    <div style="background-color: #42b983"></div>
-    <div style="background-color: #42b983"></div>
+    <div style="background-color: #7ca995"></div>
+    <div style="background-color: #b98542"></div>
+    <div style="background-color: #7c42b9"></div>
   </div>
 
 
