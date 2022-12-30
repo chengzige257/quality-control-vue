@@ -50,6 +50,19 @@
           />
         </template>
       </el-table-column>
+      <el-table-column prop="logRecord" label="加入日志管理" align="center">
+        <template #default="scope">
+          <el-switch
+              v-if="scope.row.url"
+              v-model="scope.row.logRecord"
+              active-color="#13ce66"
+              inactive-color="#F4F4F5"
+              :active-value="true"
+              :inactive-value="false"
+              @change="changeResource(scope.row)"
+          />
+        </template>
+      </el-table-column>
       <el-table-column label="操作" align="center" width="200">
         <template #default="scope">
           <el-button

@@ -1,6 +1,6 @@
 <template>
   <div class="gridContainer">
-    <div class="item1">
+    <div class="div1">
       <table class="container cannotselect">
         <thead>
         <tr>
@@ -50,7 +50,7 @@
       </table>
     </div>
 
-    <div class="el-table-classify">
+    <div class="div2">
       <button class="custom-btn btn-8" @click="newDepartmentDialogVisible = true"><span style="height: 100%">新建部门</span></button>
       <el-table  :v-loading="loading" :data="filterData" stripe height="300px">
         <el-table-column prop="name" label="姓名"/>
@@ -72,6 +72,32 @@
         </el-table-column>
       </el-table>
     </div>
+    <div class="div3">
+      <el-select @change="changeDepartment" style="height: 40px;margin: 20px" size="large" v-model="departmentIdOfProcess" placeholder="选择一个部门">
+        <el-option
+            v-for="item in this.department"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
+        />
+      </el-select>
+
+      <el-table v-loading="loading1" :data="filterProcess" stripe height="300px">
+        <el-table-column prop="processName" label="工序名"/>
+        <el-table-column prop="chargePeople" label="负责人"/>
+        <el-table-column align="right">
+          <template #header>
+            <div style="display: flex;">
+              <el-input v-model="this.search1" size="small" placeholder="search" />
+            </div>
+          </template>
+          <template #default="scope">
+            <el-button link type="primary" size="small" @click.stop="changeChargePeople(scope.row)">修改负责人</el-button>
+            <el-button link type="primary" size="small" @click.stop="deleteProcess(scope.row)">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
   </div>
   <el-dialog @close="closeModifyDepartment" v-model="modifyDepartmentVisible" width="30%" center>
     <el-input v-model="modifyDepartment.name"></el-input>
@@ -87,6 +113,17 @@
       </span>
     </template>
   </el-dialog>
+  <el-dialog @close="modifyChargePeople=''" v-model="modifyChargePeopleVisible" width="30%" center>
+    <el-input placeholder="please input new ChargePeople name" v-model="modifyChargePeople"></el-input>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="modifyChargePeopleVisible = false">取消</el-button>
+        <el-button type="primary" @click="confirmChargePeople">
+          确认
+        </el-button>
+      </span>
+    </template>
+  </el-dialog>
 </template>
 
 <script>
@@ -97,6 +134,52 @@ export default {
     this.initDepartment()
   },
   methods: {
+    confirmChargePeople() {
+      axios.put('/api/process',null,{
+        params: {
+          processId: this.modifyChargePeopleId,
+          chargePeople: this.modifyChargePeople
+        }
+      }).then(response=>{
+        if(response.data.flag) {
+          this.processData.filter(process=>{
+            if(process.id === this.modifyChargePeopleId) {
+              process.chargePeople = this.modifyChargePeople
+            }
+          })
+          this.modifyChargePeopleVisible = false
+        }
+      })
+    },
+    changeChargePeople(item) {
+      this.modifyChargePeopleId = item.id
+      this.modifyChargePeople = item.chargePeople
+      this.modifyChargePeopleVisible = true
+    },
+    deleteProcess(item){
+      axios.delete('/api/process',{
+        params: {
+          processId: item.id
+        }
+      }).then(response=>{
+        if(response.data.flag) {
+          this.processData = this.processData.filter(process=>process.id !== item.id)
+        }
+      })
+    },
+    changeDepartment(){
+      this.loading1 = true
+      axios.get('/api/process',{
+        params: {
+          departmentId: this.departmentIdOfProcess
+        }
+      }).then(response=>{
+        if(response.data.flag) {
+          this.processData = response.data.data
+          this.loading1 = false
+        }
+      })
+    },
     deleteDepartment(item){
       axios.delete("/api/department",{
         params: {
@@ -181,6 +264,13 @@ export default {
               user.name.toLowerCase().includes(this.search.toLowerCase()) || user.mail.toLowerCase().includes(this.search.toLowerCase()) || user.account.toLowerCase().includes(this.search.toLowerCase())
       )
     },
+    filterProcess() {
+      return this.processData.filter(
+          (process) =>
+              !this.search1 ||
+              process.processName.toLowerCase().includes(this.search1.toLowerCase()) || process.chargePeople.toLowerCase().includes(this.search1.toLowerCase())
+      )
+    },
   },
   watch: {
     currentBoxProp: {
@@ -202,6 +292,13 @@ export default {
   },
   data: function() {
     return {
+      modifyChargePeopleId: null,
+      modifyChargePeopleVisible: false,
+      modifyChargePeople: '',
+      search1: "",
+      loading1: false,
+      departmentIdOfProcess: null,
+      processData: [],
       newDepartmentDialogVisible: false,
       newDepartmentName: '',
       loading: false,
@@ -221,6 +318,27 @@ export default {
 <style scoped>
 
 @import url(https://fonts.googleapis.com/css?family=Open+Sans:300,400,700);
+
+.parent {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+}
+
+.div1 {
+  grid-area: 1 / 1 / 2 / 3;
+  overflow: scroll;
+}
+.div2 {
+  width: 98%;
+  grid-area: 2 / 1 / 3 / 2;
+}
+.div3 {
+  width: 98%;
+  grid-area: 2 / 2 / 3 / 3;
+}
 
 .custom-btn {
   text-align: center;
@@ -338,25 +456,18 @@ h1 {
 .gridContainer {
   height: 100%;
   display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: 1fr 1fr;
-  gap: 0px 0px;
-  grid-template-areas:
-    "."
-    ".";
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
 }
-.item1{
-  overflow: scroll;
-}
+
 .container {
   height: 100%;
   text-align: center;
   width: 100%;
   margin: 0 auto;
   display: table;
-}
-.el-table-classify {
-
 }
 
 .container td, .container th {
