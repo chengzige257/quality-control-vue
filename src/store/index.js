@@ -4,7 +4,7 @@ import createPersistedState from "vuex-persistedstate";
 export default createStore({
   state: {
     routerRollBack: [],//删除路由的回调函数
-    user: {//用户筛选条件缓存
+    user: {
       id: null,
       account: null,
       name: null,

@@ -298,7 +298,6 @@ export default {
       this.$refs.ruleFormRef.resetFields()
     },
     updateOpenDialog(row){
-
       if(this.validateField.length === 4) {
         this.validateField.pop()
       }
