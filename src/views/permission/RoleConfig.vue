@@ -1,45 +1,46 @@
 <template>
 
   <div class="container">
-      <div style="height: 100%;overflow-y: scroll">
-        <el-table stripe height="100%" :data="filterTableData" @cell-click='getCell' :cell-class-name='getRowColumn'>
-          <el-table-column
-              prop="name"
-              label="英文名">
-            <template #default='scope'>
-              <el-input v-model='scope.row.name' v-if='scope.row.index === this.tabRowIndex  && scope.column.index === this.tabColumnIndex' @blur='inputBlur(scope.row)'></el-input>
-              <div v-else> {{scope.row.name}}</div>
-            </template>
-          </el-table-column>
-          <el-table-column
-              prop="nameChinese"
-              label="中文名">
-            <template #default='scope'>
-              <el-input v-model='scope.row.nameChinese' v-if='scope.row.index === this.tabRowIndex  && scope.column.index === this.tabColumnIndex' @blur='inputBlur(scope.row)'></el-input>
-              <div v-else> {{scope.row.nameChinese}}</div>
-            </template>
-          </el-table-column>
-          <el-table-column align="right">
-            <template #header>
-              <div style="display: flex;">
-                <el-input v-model="this.search" size="small" placeholder="search" />
-                <el-button style="margin-left: 7px" size="small" @click="openDialog">add Item</el-button>
-              </div>
-            </template>
-            <template #default="scope">
-              <el-button
-                  size="small"
-                  type="danger"
-                  @click="handleDelete(scope.row.id)"
-              >Delete</el-button
-              >
-            </template>
-          </el-table-column>
-        </el-table>
+
+    <div id="part2">
+
     </div>
-    <div style="background-color: #7ca995"></div>
-    <div style="background-color: #b98542"></div>
-    <div style="background-color: #7c42b9"></div>
+    <div style="height: 100%;overflow-y: scroll">
+      <el-table stripe height="100%" :data="filterTableData" @cell-click='getCell' :cell-class-name='getRowColumn'>
+        <el-table-column
+            prop="name"
+            label="英文名">
+          <template #default='scope'>
+            <el-input v-model='scope.row.name' v-if='scope.row.index === this.tabRowIndex  && scope.column.index === this.tabColumnIndex' @blur='inputBlur(scope.row)'></el-input>
+            <div v-else> {{scope.row.name}}</div>
+          </template>
+        </el-table-column>
+        <el-table-column
+            prop="nameChinese"
+            label="中文名">
+          <template #default='scope'>
+            <el-input v-model='scope.row.nameChinese' v-if='scope.row.index === this.tabRowIndex  && scope.column.index === this.tabColumnIndex' @blur='inputBlur(scope.row)'></el-input>
+            <div v-else> {{scope.row.nameChinese}}</div>
+          </template>
+        </el-table-column>
+        <el-table-column align="right">
+          <template #header>
+            <div style="display: flex;">
+              <el-input v-model="this.search" size="small" placeholder="search" />
+              <el-button style="margin-left: 7px" size="small" @click="openDialog">新增</el-button>
+            </div>
+          </template>
+          <template #default="scope">
+            <el-button
+                size="small"
+                type="danger"
+                @click="handleDelete(scope.row.id)"
+            >删除</el-button
+            >
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
   </div>
 
 
@@ -163,6 +164,42 @@ export default {
           this.roles = response.data.data
         }
       })
+      axios.get('/api/statistics/role').then(response=>{
+        if(response.data.flag) {
+          var chartDom = document.getElementById('part2');
+          var myChart = this.$echarts.init(chartDom);
+          var option;
+          option = {
+            title: {
+              text: '系统角色人数占比扇形统计图',
+              left: 'center'
+            },
+            tooltip: {
+              trigger: 'item'
+            },
+            legend: {
+              orient: 'vertical',
+              left: 'left'
+            },
+            series: [
+              {
+                type: 'pie',
+                radius: '50%',
+                data: response.data.data,
+                emphasis: {
+                  itemStyle: {
+                    shadowBlur: 10,
+                    shadowOffsetX: 0,
+                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                  }
+                }
+              }
+            ]
+          };
+
+          option && myChart.setOption(option);
+        }
+      })
     },
     getCell (row, column, cell, event) {
       this.tabRowIndex = row.index
@@ -195,7 +232,7 @@ export default {
   height: 100%;
   display: grid;
   grid-template-columns: 50% 50%;
-  grid-template-rows: 50% 50%;
+  /*grid-template-rows: 50% 50%;*/
   grid-column-gap: 5px;
   grid-row-gap: 5px;
   justify-items: stretch;

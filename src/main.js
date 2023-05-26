@@ -10,7 +10,10 @@ import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import axios from 'axios'
 import vueAxios from 'vue-axios'
 import {initMenus} from "@/utils/menu";
+import global from "@/utils/global";
+import naive from 'naive-ui'
 
+import * as echarts from 'echarts';
 //配置路由守卫
 router.beforeEach((to, from, next) => {
     if(to.path==='/'){
@@ -45,7 +48,7 @@ axios.interceptors.response.use(function (response) {
 });
 
 
-const app = createApp(App).use(vueAxios,axios).use(store).use(router).use(ElementPlus)
+const app = createApp(App).use(vueAxios,axios).use(store).use(router).use(ElementPlus).use(naive)
 
 
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {//注册ElementPlusIconsVue图标,使用方法prefix-icon="Lock"
@@ -54,6 +57,8 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {//注册Ele
 
 
 app.config.globalProperties.$ElMessage = ElMessage
+app.config.globalProperties.$global = global
+app.config.globalProperties.$echarts = echarts
 app.mount('#app')
 
 

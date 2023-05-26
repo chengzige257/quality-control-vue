@@ -44,7 +44,13 @@
           <NavBar :key="$route.fullPath"/><!--解决标签和菜单不一致的问题-->
         </el-header>
         <el-main style="background:#F7F9FB;overflow-y: scroll;height: 3px">
-            <router-view :key="$route.fullPath"/><!--解决标签和菜单不一致的问题-->
+<!--            <router-view :key="$route.fullPath"/>&lt;!&ndash;解决标签和菜单不一致的问题&ndash;&gt;-->
+
+          <router-view :key="$route.fullPath" v-slot="{ Component }">
+            <keep-alive :include="['DailyStatistics']">
+              <component :is="Component" />
+            </keep-alive>
+          </router-view>
         </el-main>
       </el-container>
     </el-container>

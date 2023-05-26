@@ -39,7 +39,7 @@
   >
     <template #default="scope">
       <el-icon style="position: relative;top: 2px"><Timer /></el-icon>
-      {{ scope.row.optTime}}
+      {{ this.$global.dateFormat("YYYY-mm-dd HH-MM-SS",new Date(scope.row.optTime))}}
     </template>
   </el-table-column>
 </el-table>
